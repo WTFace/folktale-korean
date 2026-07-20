@@ -1,6 +1,6 @@
 # 대본 → Google Flow 이미지 프롬프트 생성기
 
-대본 + 화풍 + 챕터 수를 받아 Google Flow Image(Nano Banana)용 프롬프트를 만든다.
+대본 + 화풍 + 장면 수를 받아 Google Flow Image(Nano Banana)용 프롬프트를 만든다.
 화풍은 텍스트(STYLE_TAIL)로 고정한다(레퍼런스 이미지 색 번짐 방지). 외부 이미지 0개 투입.
 
 ## 운영 규칙
@@ -15,13 +15,13 @@
 ## 시작 메시지
 ```
 🎬 Google Flow 이미지 프롬프트 생성기
-준비물: 1) 대본  2) 화풍(고정 STYLE_TAIL)  3) 챕터 수(기본 36)
+준비물: 1) 대본  2) 화풍(고정 STYLE_TAIL)  3) 장면 수(기본 36)
 ```
 
 ## 처리 흐름
 ```
 PHASE 1   화풍 추출 → STYLE_TAIL
-PHASE 2   챕터 분할
+PHASE 2   장면 분할
 PHASE 3   캐릭터 추출 + 조선 복식 앵커
 PHASE 3.5 샷 배정 + 포즈 배정
 PHASE 4   STEP 1(배경·포즈 분리) + STEP 2 조립
@@ -45,17 +45,18 @@ print(f"✅ P1 ({words}단어)")
 응답: `화풍: <STYLE_TAIL>`
 
 ═══════════════════════════════════════════════
-## PHASE 2: 챕터 분할
+## PHASE 2: 장면 분할
 ═══════════════════════════════════════════════
 본문 추출(인트로/아웃트로 제거) → play length(about 162 wpm) 균등 분할.
-첫 챕터는 "Long ago" 본문 시작부터. chapters=[{"n","start_idx","end_idx"}]
+첫 장면은 "Long ago" 본문 시작부터. scenes=[{"n","start_idx","end_idx"}]
 
-모든 챕터를 균등하게 처리한다.
+모든 장면을 균등하게 처리한다.
 
 ```python
 import re
 RAW_SCRIPT = """<대본 전체>"""
-N_CHAPTERS = <default 36>
+RAW_SCRIPT = re.sub(r'(?m)^\s*\[[^\]\n]*\]\s*$', '', RAW_SCRIPT)  # [CHAPTER n], [INTRO] 등 마커 라인 제거
+N_SCENES = <default 36>
 sentences = re.split(r'(?<=[.!?。"\u201d\u2019])\s+', re.sub(r'\s+',' ',RAW_SCRIPT).strip())
 sentences = [s.strip() for s in sentences if s.strip()]
 INTRO_KW=["Now, let's begin"]
@@ -63,38 +64,47 @@ OUTRO_KW=["Thank you for watching"]
 intro_end=0
 for i in range(min(10,len(sentences))):
     if any(k in sentences[i] for k in INTRO_KW): intro_end=i+1
+assert intro_end>0, "❌ 인트로 키워드 미검출 — intro는 제목 포함 10문장 이내, 마지막 문장에 INTRO_KW 필수"
 outro_start=len(sentences)
 for i in range(len(sentences)-1, max(len(sentences)-8,0)-1, -1):
     if any(k in sentences[i] for k in OUTRO_KW): outro_start=i
 body=sentences[intro_end:outro_start]
-assert len(body)>=N_CHAPTERS, f"❌ 본문 {len(body)}문장 부족"
-# chapters: 단어수 균등 분할
-assert len(chapters)==N_CHAPTERS
-for i in range(1,len(chapters)):
-    assert chapters[i]["start_idx"]==chapters[i-1]["end_idx"]+1, f"❌ 경계 불연속 Ch{i+1}"
+assert len(body)>=N_SCENES, f"❌ 본문 {len(body)}문장 부족"
+# scenes: 단어수 균등 분할
+assert len(scenes)==N_SCENES
+for i in range(1,len(scenes)):
+    assert scenes[i]["start_idx"]==scenes[i-1]["end_idx"]+1, f"❌ 경계 불연속 장면{i+1}"
 print(f"✅ P2 (본문 {len(body)}문장)")
 ```
-응답: `챕터 분할 완료`
+응답: `장면 분할 완료`
 
 ═══════════════════════════════════════════════
-## PHASE 3: 캐릭터 추출 + 조선 복식 앵커  (최대 5명)
+## PHASE 3: 캐릭터 추출 + 조선 복식 앵커  (기본 5명, 단계 변형 포함 최대 6슬롯)
 ═══════════════════════════════════════════════
-- 등장 빈도 상위 최대 5명만 잠근다.
-- 같은 인물 다른 단계(거지→의녀)는 다른 name.
-- 앵커 3요소 = 반드시 Korean·Joseon + 조선 복식 명사. 국적 불명 표현 금지.
+- 등장 빈도 상위 최대 5명만 잠근다. 단계 변형이 필요한 이야기는 총 6슬롯까지 허용.
+- 같은 인물 다른 단계(거지→의녀, 혹 제거 전→후 등 외모 변화)는 다른 name으로 별도 슬롯.
+  단, 단계 변형은 등장 빈도 상위 2명에게만 허용 — 나머지는 단일 앵커로 커버.
+- 비인간 캐릭터(도깨비·귀신·구미호 등)는 is_human=False: 조선 복식 마커 대신 creature 마커로 검증.
+  복식을 입힐 수 있으면 입힌다(예: ragged dark jeogori vest) — 화면 통일감에 유리.
+- 앵커 3요소 = 인간은 반드시 Korean·Joseon + 조선 복식 명사. 국적 불명 표현 금지.
 - 앵커에는 신원(복식·머리·얼굴·체형)만. 자세·손동작·표정·시선을 넣지 않는다.
 
 ```python
 import re
-ingredients=[{"name":"...","role":"...","chapters":"...","rank":1,
+ingredients=[{"name":"...","role":"...","scenes":"...","rank":1,"is_human":True,
   "anchor_outfit":"...","anchor_hair":"...","anchor_feature":"..."}]
 for ing in ingredients:
     for k in ["role","anchor_outfit","anchor_hair","anchor_feature"]: assert ing.get(k), f"❌ {ing['name']} {k}"
-assert 1<=len(ingredients)<=5, f"❌ 인원 {len(ingredients)}"
+assert 1<=len(ingredients)<=6, f"❌ 인원 {len(ingredients)}"
 KMARK=["jeogori","dopo","danryeong","durumagi","gat","garima","samo","baji","chima","hanbok","topknot"]
+CMARK=["horn","goblin","dokkaebi","ghost","spirit","gumiho","fox","tiger","serpent","dragon"]
 for ing in ingredients:
     blob=(ing["anchor_outfit"]+" "+ing["anchor_hair"]).lower()
-    assert any(m in blob for m in KMARK), f"❌ '{ing['name']}' 조선 복식 마커 없음"
+    if ing.get("is_human",True):
+        assert any(m in blob for m in KMARK), f"❌ '{ing['name']}' 조선 복식 마커 없음"
+    else:
+        blob+=" "+ing["anchor_feature"].lower()
+        assert any(m in blob for m in CMARK), f"❌ '{ing['name']}' creature 마커 없음"
 print(f"✅ P3 ({len(ingredients)}명)")
 ```
 응답: `캐릭터: ...`
@@ -106,15 +116,15 @@ print(f"✅ P3 ({len(ingredients)}명)")
 ```python
 # shots=[{"shot","pose", "cast"}] cast: "main"(앵커 캐릭터) / "extras"(무명 인물만) / "none"(무인물)
 ```
-아래 샷 목록에서 챕터마다 하나씩 고른다. 바로 앞 챕터와 같은 샷만 아니면 된다.
-바로 옆 챕터와 다른 샷이면 충분하다. 무인물/무명(non main cast) 샷은 전체의 20% 이하, 연속 금지
+아래 샷 목록에서 장면마다 하나씩 고른다. 바로 앞 장면과 같은 샷만 아니면 된다.
+바로 옆 장면과 다른 샷이면 충분하다. 무인물/무명(non main cast) 샷은 전체의 20% 이하, 연속 금지
 ```
 medium_shot, medium_close_up, long_shot, two_shot, over_the_shoulder,
 wide_landscape, low_angle, side_profile, front_view, close_up_portrait
 ```
 
 ### 포즈 배정
-매 shot 아래에서 하나 고른다. 바로 앞 챕터와 같은 포즈만 아니면 된다.
+매 shot 아래에서 하나 고른다. 바로 앞 장면과 같은 포즈만 아니면 된다.
 ```python
 POSE_POOL = [
   "caught mid-stride, weight thrown onto one leg",
@@ -139,14 +149,14 @@ POSE_POOL = [
   "raising a small object toward the light with both hands",
 ]
 
-assert len(shots)==N_CHAPTERS
+assert len(shots)==N_SCENES
 for s in shots:
     if s["cast"]!="none": assert s["pose"] in POSE_POOL
     else: s["pose"]="none"
 for i in range(1,len(shots)):
-    assert shots[i]["shot"]!=shots[i-1]["shot"], f"❌ Ch{i+1} 샷 연속"
+    assert shots[i]["shot"]!=shots[i-1]["shot"], f"❌ 장면{i+1} 샷 연속"
     if shots[i]["pose"]!="none" and shots[i-1]["pose"]!="none":
-        assert shots[i]["pose"]!=shots[i-1]["pose"], f"❌ Ch{i+1} 포즈 연속"
+        assert shots[i]["pose"]!=shots[i-1]["pose"], f"❌ 장면{i+1} 포즈 연속"
 print(f"✅ P3.5")
 ```
 응답: `샷·포즈 배정 완료`
@@ -157,7 +167,7 @@ print(f"✅ P3.5")
 ### STEP 1 — UPLOAD (신원 전용 / 배경분리 / 포즈분리)
 캐릭터당 한 장. Flow ingredient 슬롯용 신원 식별 전용 레퍼런스.
 ```
-=== <n> (<name>, <role> / 챕터 <범위>) ===
+=== <n> (<name>, <role> / 장면 <범위>) ===
 === <n> UPLOAD ===
 Character identity reference of <a Korean Joseon-era character, anchor_outfit + anchor_hair + anchor_feature>, neutral A-pose standing straight with both arms relaxed at the sides, plain flat neutral gray background, subject fully isolated, this is an identity reference only and the pose, hand position and background must NOT carry over into any scene, no hands clasped, no props no other figures, <STYLE_TAIL>
 ```
@@ -229,10 +239,10 @@ assert not kor, f"❌ 한글 잔존 {kor[:3]}"
 STUDIO_BAN=[r'(gray|grey|neutral)\s+background\b',r'\bstudio backdrop\b',r'\bblank background\b']
 for n,l in enumerate(prompt_lines,1):
     if [p for p in STUDIO_BAN if re.search(p,l.lower())]:
-        assert False, f"❌ Ch{n} 회색 스튜디오 배경"
+        assert False, f"❌ 장면{n} 회색 스튜디오 배경"
 # SAFE_TAG·STYLE_TAIL 존재
 for n,l in enumerate(prompt_lines,1):
-    assert "no text no letters" in l, f"❌ Ch{n} SAFE_TAG 누락"
+    assert "no text no letters" in l, f"❌ 장면{n} SAFE_TAG 누락"
 print(f"✅ 최소 검증 통과 ({len(prompt_lines)}장면)")
 ```
 
@@ -240,7 +250,7 @@ print(f"✅ 최소 검증 통과 ({len(prompt_lines)}장면)")
 <제목>_flow_prompts.txt 한 파일에 아래 순서로 저장 후 present_files.
 ```
 STEP 1
-=== <n> (<name>, <role> / 챕터 <범위>) ===
+=== <n> (<name>, <role> / 장면 <범위>) ===
 === <n> UPLOAD ===
 Character identity reference of ... neutral A-pose ... must NOT carry over ... , <STYLE_TAIL>
 (캐릭터별 반복)
