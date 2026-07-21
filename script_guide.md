@@ -1,7 +1,8 @@
 # 대본 생성 프롬프트
 
->prompt for folktale youtube script
-> 검증된 이야기 소재를 골라 → set title → 이야기 골격에 맞춰 → Examples are mostly Korean, use english equivalent for the final script.
+- prompt for folktale youtube script
+- 검증된 이야기 소재를 골라 → set title → 이야기 골격에 맞춰 → Examples are mostly Korean, use english equivalent for the final script.
+- the script will be input for `flow_prompt_generator.md`
 
 ---
 

@@ -169,15 +169,17 @@ print(f"✅ P3.5")
 ```
 === <n> (<name>, <role> / 장면 <범위>) ===
 === <n> UPLOAD ===
-Character identity reference of <a Korean Joseon-era character, anchor_outfit + anchor_hair + anchor_feature>, neutral A-pose standing straight with both arms relaxed at the sides, plain flat neutral gray background, subject fully isolated, this is an identity reference only and the pose, hand position and background must NOT carry over into any scene, no hands clasped, no props no other figures, <STYLE_TAIL>
+<a Korean Joseon-era character, anchor_outfit + anchor_hair + anchor_feature>, neutral A-pose standing straight with both arms relaxed at the sides, plain flat neutral gray background, subject fully isolated, this is an identity reference only and the pose, hand position and background must NOT carry over into any scene, no hands clasped, no props no other figures, <STYLE_TAIL>
 ```
 ★ STEP 1·2 어디에도 한국어 금지(헤더 === 행만 예외).
 
 ### STEP 2 — 장면 프롬프트 (조립 공식)
 ```
-shot with main character: N. @name, anchor1, anchor2, anchor3 — [샷 영문] of [주어] [POSE_POOL 포즈]. [행동·배경·로컬컬러·인원신호] 15~65단어. <SAFE_TAG>, <STYLE_TAIL>
+shot with main character: N. @name — [샷 영문] of [주어] [POSE_POOL 포즈]. [행동·배경·로컬컬러·인원신호] 15~65단어. <SAFE_TAG>, <STYLE_TAIL>
 shot without main character: N. [샷] of <조선 로케이션·사물 주어>. [배경·소품·분위기 묘사] 15~65단어. no people no figures, <SAFE_TAG>, <STYLE_TAIL>
 ```
+앵커 3요소는 STEP 1 UPLOAD(Flow character info 탭)에만 넣는다. 장면 프롬프트에서 앵커 반복 금지 — 신원은 @태그가 전달한다.
+단, 플롯상 그 장면에서 보여야 하는 신체 특징(혹의 유무·개수 등)은 [행동] 묘사에 자연스럽게 포함.
 **조립 체크리스트 (매 줄):**
 
 공통:
@@ -187,7 +189,7 @@ shot without main character: N. [샷] of <조선 로케이션·사물 주어>. [
 4. 한글 없음
 
 cast="main":
-5. `@name,` 으로 시작 (앵커 최선두), em dash `—` 뒤에 [샷 영문]
+5. `@name —` 으로 시작, em dash `—` 뒤에 [샷 영문]. 앵커 3요소 반복 금지 (STEP 1 전용)
 6. 주어 뒤에 shots[n]["pose"] 그대로
 
 cast="extras":
@@ -261,7 +263,7 @@ n. ...
 
 ===프롬프트===
 [영어 프롬프트 1~n]
-1. @name, anchor1, anchor2, anchor3 — Shot of <주어> <POSE_POOL 포즈> ... , <SAFE_TAG>, <STYLE_TAIL>
+1. @name — Shot of <주어> <POSE_POOL 포즈> ... , <SAFE_TAG>, <STYLE_TAIL>
 n. ...
 ```
 - 대본·영어 모두 줄 시작은 숫자+점+공백만.
