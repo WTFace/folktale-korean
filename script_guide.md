@@ -80,10 +80,4 @@ estimate play length.
 ---
 
 ## 고정 마무리 멘트
-
-```
-Thank you for watching. + any positive vibe goodbye.
-- Hope you enjoyed this!
-- Until next time, take care.
-- God bless you.
-```
+Thank you for watching. Hope you enjoyed this.

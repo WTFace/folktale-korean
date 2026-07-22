@@ -6,24 +6,23 @@
 
 ## 신분별 이름
 
-**천민·노비**
-- 여성: Makdeok, Yunja, Gomnyeo, Siwol, Ongnyo
-- 남성: Bau, Musoe, Chilseong, Dolmuchi, Maksan
+**Lowborn / Slaves**
+- 여성: Morae, Yunja, Somi, Siwol, Ongnyo
+- 남성: Bori, Muso, Chilsung, Dolsu, Duri
 
-**평민·상민**
-- 여성: Okbun, Jeongsun, Myungsim, Jeongwol, Boreum
-- 남성: Deokman, Manseok, Bonggu, Dusik, Seokwoo
+**Commoners**
+- 여성: Okbun, Sunha, Myungsim, Jeongwol, Bora
+- 남성: Bong, Manseok, Bonggu, Dusik, Seokwoo
 
-**양반·사대부**
-- 남성: Yunseo, Siheon, Gyeongwon, Doheon, Jeonghyeon
+**Nobility / Aristocrats**
+- 남성: ManHo, Siheon, Gyeongwon, Dohun, Jinsu
 - 여성: 택호를 씁니다 → Andong-daek, Cheongsong-daek, Haeju-daek, Naju-daek
-  (양반가 여성은 본명 대신 친정 지명 + '댁'으로 부르는 게 자연스럽습니다)
 
-**기생**
-- Maewol, Chaeryeon, Unsim, Jukhyang, Wolseon
+**Gisaeng - Courtesans / Artists**
+- Maewol, Wolha, Chunhee, Jukhyang, Yura
 
-**승려**
-- Beobin, Hyewoon, Ilseon, Cheoneung, Jeonggwan
+**Monk**
+- Beobin, Hyewon, Seosan, JongGhan, Dohyeon
 
 **무사**
 Muyeong, Geomho, Cheolung, Goongbok, Hodam
@@ -40,7 +39,7 @@ Muyeong, Geomho, Cheolung, Goongbok, Hodam
 
 ## 이름 지을 때 주의
 
-- **소리 내 읽기 쉬운 이름**을 고릅니다 (낭독용이니까요).
+- **소리 내 읽기 쉬운 이름**을 고릅니다.
 - 왕·왕비·세자는 이름 대신 "임금·중전·세자" 같은 직책으로 부릅니다.
 - 너무 흔한 이름(춘향·길동·돌쇠·개똥이 등)은 피합니다.
 - 이미 만든 영상에서 쓴 이름과 겹치지 않게 합니다.

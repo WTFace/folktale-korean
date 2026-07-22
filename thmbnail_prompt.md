@@ -20,7 +20,7 @@ headline means text embeded in the tumbnail image(max 16 words).
      우선해서 그대로 쓴다(본편·인트로와 같은 그림체 유지).
    - 이 파일이 없을 때만 3단계의 fallback 템플릿을 쓴다.
 
-3. **이미지 프롬프트의 목적 = creating a space for the headline** 하단 2줄이면 아래가 비어야 하고, 우측 4줄이면 왼쪽이 비어야 한다.
+3. **이미지 프롬프트의 목적 = creating a space for the headline**
 
 4. **headline만 보고 결말이 추리되면 다시 쓴다.**
 
@@ -44,13 +44,13 @@ input: tumbnail_brief, flow_prompts:
 ## 출력 템플릿 (이 형식 그대로)
 
 ```
-■ 옵션 1 [left or right max 4 lines]
+■ 옵션 1 [top max 2 lines]
 
-■ 옵션 2 [left or right max 4 lines]
+■ 옵션 2 [top max 2 lines]
 
-■ 옵션 3 [top max 2 lines]
+■ 옵션 3 [top max 1 line]
 
-■ 옵션 4 [top max 2 lines]
+■ 옵션 4 [top max 1 line]
 ```
 
 ## 자극 코드 분배 (디폴트)
@@ -67,16 +67,14 @@ input: tumbnail_brief, flow_prompts:
 
 ## A. 형식
 
-**좌/우 max 4 lines**
+**top max 2 lines**
 - 상황·인물 / 클라이맥스·봉인
-- 끝맺음: 추상 명사 / 사물 / 시간 단위 OK
-- 예: "글도 몰랐던 / 농부가 / 양반 셋을 / 이긴 방법"
+- 예: "글도 몰랐던 농부가 / 양반 셋을 이긴 방법"
 
-**상/하 max 2 lines**
+**top max 1 line**
 - (가) 명사 봉인형: 추상 명사로 끝 (사연/이유/내막/정체/방법/한마디/최후)
 - (나) 인용 대사형: 한 줄이 대사, 인물 명사로 끝
 - (다) "~는데..." 봉인형: 말줄임으로 끝
-- 예: "스님에게 쌀 한 바가지 줬더니 / '내일 당장 이 집을 떠나라'고 말한 소름 돋는 이유"
 
 ## B. 자극 코드 5종과 매칭 사건
 
@@ -101,9 +99,8 @@ headline에는 사건의 클라이맥스 한 컷(행동 1개 또는 발화 1개)
 ## D. 시점·인과
 
 - 그 시점에 알 수 있는 정보만 쓴다.
-- 감정이입 대상은 사람으로 (동물 시점 X).
+- 감정이입 대상은 사람으로.
 - 인물은 2명까지 안전. 3명 이상이면 시선이 분산되니 피한다.
-- 인용 대사의 화자 = 2줄의 주체와 같아야 한다.
 
 ## E. 신분 어휘 (직무 정확히)
 
@@ -204,7 +201,6 @@ headline에는 사건의 클라이맥스 한 컷(행동 1개 또는 발화 1개)
 - "8k, ultra detailed, masterpiece" 같은 SD 키워드 스팸 금지.
 - 콤마로만 끊은 키워드 나열 금지 → **완결된 영문 문장 3~5개**로 쓴다.
 - 인물 얼굴형 특징(square jaw 등) 묘사 금지.
-- "upper 60% / top 40%" 같은 숫자 비율 명령 금지.
 - cold / dim / dark / pale 남발 금지.
 
 ## 영문 프롬프트에 순서대로 담을 것
@@ -232,11 +228,8 @@ headline에는 사건의 클라이맥스 한 컷(행동 1개 또는 발화 1개)
 
 ## ★ headline 위치별 구도 (숫자·로우앵글 금지, 아래 문장을 그대로 붙인다)
 
-**left/right option** — 이 문장을 넣는다:
-"Compose the frame so the main subject and the key action sit toward the left/right side of the image, with the figure facing or turned to the right/left. Let the opposite side fall away into soft, uncluttered atmosphere — a blurred wall, empty sky, or shadowed depth — carrying no faces, objects, or busy detail, so that side reads as calm open space."
-
 **top option** — 이 문장을 넣는다:
-"Frame the scene at roughly eye level so the faces and key action gather across the upper part of the image, while the foreground below settles into a simple, near-empty surface — plain wooden floor, bare earth, or smooth ground — with no important detail, leaving the upper/lower band quiet and open."
+"Frame the scene at roughly eye level so the faces and key action gather across the lower part of the image, while the space above settles into a simple, near-empty area — soft shadowed depth, drifting smoke, bare rafters, or open sky — with no important detail, leaving the upper band quiet and open, so upcoming text will be visible."
 
 ## 시간대-사건 영문 빛 (스타일 색감 > 분위기)
 - 일상·통쾌 → "warm late afternoon golden hour light slanting from the side"
@@ -250,7 +243,7 @@ hanbok, gat, jeogori, dopo, chima, hanok, giwa roof, binyeo
 ## 래퍼런스 반영 — 넷 중 하나
 
 **D. `<제목>_flow_prompts.txt`가 있는 경우 (기본, 최우선)**
-이 프로젝트는 이미 본편 36장면·인트로 클립에서 같은 STYLE_TAIL을 쓰고 있다. 그 파일
+이 프로젝트는 이미 본편 많은 장면·인트로 클립에서 같은 STYLE_TAIL을 쓰고 있다. 그 파일
 아무 줄 끝에서나 STYLE_TAIL을 그대로 가져와 쓴다 — A/B/C처럼 새로 추출·압축하지 않는다.
 사용자가 별도 레퍼런스 이미지·프롬프트를 명시적으로 주면 그때만 A/B로 대체한다.
 
@@ -276,18 +269,16 @@ hanbok, gat, jeogori, dopo, chima, hanok, giwa roof, binyeo
 [부록 B — 흥행 headline 풀 (다양성 막힐 때만, use english equivalent)]
 ═══════════════════════════════════════════
 
-**left/right option**
-- "글 한 줄 몰랐던 / 농부가 / 양반 셋을 / 이긴 방법"
-- "쫓겨난 과부를 / 아내로 거둔 머슴 / 하룻 아침에 / 인생역전을 하다"
-- "거지 꼴로 두 며느리를 찾아가 / 시험을 한 지혜로운 시아버지"
-- "못난 막내 / 아내 삼은 / 가난한 선비 / 벼락 부자가 되는데..."
+- "글 한 줄 몰랐던 농부가 양반 셋을 이긴 방법"
+- "쫓겨난 과부를 아내로 거둔 머슴 하룻 아침에 인생역전"
+- "거지 꼴로 두 며느리를 찾아가 시험한 지혜로운 시아버지"
+- "못난 막내 아내 삼은 가난한 선비 벼락 부자가 되는데..."
 
-**top option**
 - "엄마를 죄인 만든 놈들 / 7살 아이의 '왜요' 세 번에 무너졌다"
-- "동냥 온 스님에게 쌀 한 바가지 줬더니 / '내일 당장 이 집을 떠나라'고 말한 소름 돋는 이유"
+- "스님에게 쌀 한 바가지 줬더니 / '내일 당장 이곳을 떠나라'고 말한 이유"
 - "제발 남편인 척만 해주세요! / 맨발의 노비가 붙잡은 남자"
-- "중풍 든 아내를 뱀굴에 처넣은 남편 / 발소리 끊기자 여인의 서늘한 웃음소리가 들리는데..."
-- "씨받이 첫날밤 / 나리가 반했다?"
+- "중풍 든 아내를 뱀굴에 처넣은 남편 / 발소리 끊기자 여인의 서늘한 웃음소리가..."
+- "씨받이 첫날밤 나리가 반했다?"
 
 ═══════════════════════════════════════════
 [부록 C — 행동 풀 (세트 내 중복 회피)]

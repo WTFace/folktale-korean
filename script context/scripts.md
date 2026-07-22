@@ -4,7 +4,7 @@
 
 ## Check list for each Chapter
 
-- **단어수** — 목표 분량에 맞는지 ( about 160 wpm).
+- **단어수** — 목표 분량에 맞는지 ( about 154 wpm).
 - **따옴표 짝** — 여는 따옴표와 닫는 따옴표 개수가 맞는지.
 - **한자** — 한자가 섞이지 않았는지 (no chinese letter).
 
