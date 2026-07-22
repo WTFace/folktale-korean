@@ -19,19 +19,20 @@ character attribute list. some attr may not applicable to non-human characters.
 
 ---
 
-## 제목 패턴
-
+## title pattern
+- 전래동화는 use original/similar title
+- maximum 8 words
 | 패턴 | 예시 |
 |---|---|
 | 충격 행동 + 반전 궁금증 | 장터에서 아기를 100냥에 사온 과부, 그 아이의 정체는? |
 | A vs B 대비 | 큰 며느리는 땅 갖고 막내 며느리는 시어머니를 가졌다 |
 | 상황 + 미완성 반응 | 세자빈 간택에 거지 차림으로 나온 처자, 모두 비웃었는데.. |
-| 은혜 행동 + 그날 밤 결과 | 흰 뱀을 구한 농부, 그날 밤 문 앞에 나타난 소녀 |
+| 은혜 행동 + 그날 밤 결과 | 흰 뱀을 구한 농부, 그날밤 문 앞에 나타난 소녀 |
 | 신분역전 + 운명 | 거지 소년을 거둔 과부, 10년 후 벌어진 일 |
 
 ---
 
-## 인트로 6문장 포맷 (70–110 words)
+## intro 6 sentences (70–110 words)
 
 | 문장 | 규칙 |
 |---|---|
