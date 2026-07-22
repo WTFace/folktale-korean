@@ -30,7 +30,7 @@ headline means text embeded in the tumbnail image(max 16 words).
 [입력 형식]
 ═══════════════════════════════════════════
 
-사용자가 [썸네일 브리프]를 준다:
+input: tumbnail_brief, flow_prompts:
 
 대사·시각 디테일은 위 정보에서 추론해 직접 만든다.
 누락 시 처리:
@@ -48,9 +48,9 @@ headline means text embeded in the tumbnail image(max 16 words).
 
 ■ 옵션 2 [left or right max 4 lines]
 
-■ 옵션 3 [top or bottom max 2 lines]
+■ 옵션 3 [top max 2 lines]
 
-■ 옵션 4 [top or bottom max 2 lines]
+■ 옵션 4 [top max 2 lines]
 ```
 
 ## 자극 코드 분배 (디폴트)
@@ -204,7 +204,7 @@ headline에는 사건의 클라이맥스 한 컷(행동 1개 또는 발화 1개)
 - "8k, ultra detailed, masterpiece" 같은 SD 키워드 스팸 금지.
 - 콤마로만 끊은 키워드 나열 금지 → **완결된 영문 문장 3~5개**로 쓴다.
 - 인물 얼굴형 특징(square jaw 등) 묘사 금지.
-- "upper 60% / bottom 40%" 같은 숫자 비율 명령 금지.
+- "upper 60% / top 40%" 같은 숫자 비율 명령 금지.
 - cold / dim / dark / pale 남발 금지.
 
 ## 영문 프롬프트에 순서대로 담을 것
@@ -235,7 +235,7 @@ headline에는 사건의 클라이맥스 한 컷(행동 1개 또는 발화 1개)
 **left/right option** — 이 문장을 넣는다:
 "Compose the frame so the main subject and the key action sit toward the left/right side of the image, with the figure facing or turned to the right/left. Let the opposite side fall away into soft, uncluttered atmosphere — a blurred wall, empty sky, or shadowed depth — carrying no faces, objects, or busy detail, so that side reads as calm open space."
 
-**top/bottom option** — 이 문장을 넣는다:
+**top option** — 이 문장을 넣는다:
 "Frame the scene at roughly eye level so the faces and key action gather across the upper part of the image, while the foreground below settles into a simple, near-empty surface — plain wooden floor, bare earth, or smooth ground — with no important detail, leaving the upper/lower band quiet and open."
 
 ## 시간대-사건 영문 빛 (스타일 색감 > 분위기)
@@ -282,7 +282,7 @@ hanbok, gat, jeogori, dopo, chima, hanok, giwa roof, binyeo
 - "거지 꼴로 두 며느리를 찾아가 / 시험을 한 지혜로운 시아버지"
 - "못난 막내 / 아내 삼은 / 가난한 선비 / 벼락 부자가 되는데..."
 
-**top/bottom option**
+**top option**
 - "엄마를 죄인 만든 놈들 / 7살 아이의 '왜요' 세 번에 무너졌다"
 - "동냥 온 스님에게 쌀 한 바가지 줬더니 / '내일 당장 이 집을 떠나라'고 말한 소름 돋는 이유"
 - "제발 남편인 척만 해주세요! / 맨발의 노비가 붙잡은 남자"

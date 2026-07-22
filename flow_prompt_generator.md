@@ -250,7 +250,7 @@ for n,l in enumerate(prompt_lines,1):
 print(f"✅ 최소 검증 통과 ({len(prompt_lines)}장면)")
 ```
 
-## 출력: 2 files (이 구조·순서 고정)
+## output: 2 files (이 구조·순서 고정)
 <제목>_scene_script.txt
 ```
 [대본 1~n]
@@ -260,11 +260,13 @@ n. ...
 <제목>_flow_prompts.txt 한 파일에 아래 순서로 저장 후 present_files.
 ```
 STEP 1
-=== <n> (<name>, <role>) ===
-=== <n> UPLOAD ===
-Character identity reference of ... neutral A-pose ... must NOT carry over ... , <STYLE_TAIL>
-(캐릭터별 반복)
+PORTRAIT_TEMPLATE = neutral A-pose standing straight with both arms relaxed at the sides, plain flat neutral gray background, subject fully isolated, this is an identity reference only and the pose, hand position and background must NOT carry over into any scene, no hands clasped, no props no other figures,
 
+=== <n> (<name>, <info>) ===
+=== <n> Flow character prompt ===
+<a Korean Joseon-era character, anchor_outfit + anchor_hair + anchor_feature>, <PORTRAIT_TEMPLATE 전체 그대로 전개>, <STYLE_TAIL>
+(캐릭터별 반복 — PORTRAIT_TEMPLATE는 매 줄 문자 그대로 펼쳐 쓴다. "PORTRAIT_TEMPLATE"라는 단어를
+ 그대로 남기지 않는다. 위 한 줄의 선언은 다른 문서가 이 값을 잘라내는 기준일 뿐이다.)
 
 ===scene prompts===
 [1~n]
@@ -273,8 +275,9 @@ n. ...
 ```
 - 대본·영어 모두 줄 시작은 숫자+점+공백만.
 - 대본 1번은 본문 첫 문장 "Long ago" 부터.
-- 두 블록 완전 분리. STEP1 → 대본 → 영어 순서 고정. 영어블록 한글 금지.
+- 두 블록 완전 분리. STEP1 → scene prompts 순서 고정. 영어블록 한글 금지.
 - 장면 배경은 실제 조선 로케이션 or nature(no modern things).
 - 이 파일 하나가 다른 프롬프트 생성기(thmbnail_prompt.md, intro_prompt.md)의 캐릭터·화풍
-  소스가 된다 — STEP1에서 캐릭터 외형을, 아무 줄 끝에서나 STYLE_TAIL을 읽는다
+  소스가 된다. 캐릭터 외형 = STEP1 각 줄에서 PORTRAIT_TEMPLATE 앞부분만(뒷부분은 버림),
+  STYLE_TAIL = PORTRAIT_TEMPLATE 뒷부분(STEP1·scene prompts 아무 줄에서나 동일).
   (각 문서의 "레퍼런스 반영" 절 참고, 추출 규칙은 각 문서에 명시).
