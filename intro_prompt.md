@@ -1,11 +1,10 @@
 # 인트로(훅) → Google Flow 이미지+영상 프롬프트 생성기
 
 목적: 대본의 인트로(훅) 구간 + 기존 캐릭터 Ingredient + STYLE_TAIL을 받아
-Google Flow(Ingredients to Video / Gemini Omni Flash)용 클립 프롬프트를 만든다.
-본편 36장면(flow_prompt_generator.md)과 완전히 별도. 인트로 전용, 짧다.
+Google Flow(Ingredients to Video / Veo 3.1 Lite || Omni Flash)용 클립 프롬프트를 만든다.
+본편 장면(default 48)과 완전히 별도. 인트로 전용, 짧다.
 
-캐릭터 Ingredient·STYLE_TAIL을 본편과 공유해 톤을 통일하고,
-별도 구독 없이 이미 쓰는 Flow 크레딧으로 처리한다.
+캐릭터 Ingredient(character description in [title]_flow_prompt.txt)·STYLE_TAIL을 본편과 공유해 톤을 통일.
 
 ---
 
@@ -27,17 +26,16 @@ Google Flow(Ingredients to Video / Gemini Omni Flash)용 클립 프롬프트를 
 
 ## 문장 수 != 클립 수
 
-본편과 달리 인트로는 문장이 6개 안팎으로 매우 적다. 문장 하나를 그대로 클립 프롬프트로
+본편과 달리 인트로는 문장이 6개 정도. 문장 하나를 그대로 클립 프롬프트로
 쓰면 Flow가 배경·소품·조명·인물 동작 같은 디테일을 스스로 지어내며 본편과 다른 장면을
-만든다 (실측 확인됨). 그래서:
+만든다 (실측 확인됨)
 
 - 클립은 **문장이 아니라 감정 비트** 단위로 나눈다 (보통 3~5클립).
 - 한 클립에 나레이션 문장 여러 개를 묶어도 된다. 대사(따옴표) 문장은 립싱크 정확도를
   위해 단독 클립으로 둔다.
 - **디테일 보강 규칙 (핵심):** 인트로 문장이 묘사하는 순간과 같은 순간을 본편 챕터가
   이미 상세히 묘사하고 있다면 (예: 인트로의 "goblins twice his size"는 챕터 3의
-  "blue-gray as a storm cloud, one blunt horn, iron club as long as a fence post"와
-  같은 순간), 그 감각적 묘사(외형·소품·배경·조명)를 가져와 프롬프트를 보강한다.
+  "blue-gray as a storm cloud, one blunt horn, iron club as long as a fence post"와 같은 순간), 그 감각적 묘사(외형·소품·배경·조명)를 가져와 프롬프트를 보강한다.
   단, 본편에서만 드러나는 결말·정체·다음 전개는 절대 가져오지 않는다 — 이미 인트로
   시점에 드러나 있는 디테일만 확장한다.
 
@@ -121,8 +119,7 @@ Location identity reference of a weathered Korean Joseon-era mountain shrine int
 sagging tiled roof beams, wooden altar table, faded wall paintings of mountain spirits,
 one door hanging by a single hinge, neutral even daylight with no weather effects,
 completely empty with no characters, no fire, no rain, no props in motion,
-this is a structural identity reference only and the lighting, weather and any
-characters must NOT carry over into any scene, <STYLE_TAIL>
+this is a structural identity reference only and the lighting, weather and any characters must NOT carry over into any scene, <STYLE_TAIL>
 ```
 
 응답: `캐릭터 재사용: {cast_in_intro} / 로케이션 신규: {yes/no}`
@@ -135,21 +132,19 @@ characters must NOT carry over into any scene, <STYLE_TAIL>
 Ingredient 이미지 + 텍스트 프롬프트로 영상을 바로 만든다).
 
 ### 조립 공식
-
 ```
-CLIP n (지속 {duration}s, {대사|나레이션})
 [원문] 그 클립이 다루는 대본 문장 원문 그대로 (수정 금지)
-[Ingredients] @name1 [, @name2] [, LOCATION]  ← 최대 3장
+
+CLIP n (지속 {duration}s, {대사|나레이션})
+
+[Ingredients] @name1 [, @name2] [, @LOCATION]  ← 최대 3장
 [Flow 프롬프트]
-<주어(@name 또는 로케이션 명사)> <행동> <카메라 언급 1개> <조명·배경·소품 상세>
+<주어(@name or @LOCATION)> <행동> <카메라 언급 1개> <조명·배경·소품 상세>
 <로컬컬러>. 25~70단어. no text no letters no words no modern objects, <STYLE_TAIL>
-[오디오]
-- 대사 클립: DIALOGUE: "<원문 대사 그대로>" — English dialogue, precise lip-sync,
-  accurate mouth movements matching every word, natural [성별] voice matching the
-  character's age and tone.
-- 나레이션 전용 클립: MUTE — no dialogue, no voice, ambient sound only (wind, rain,
-  fire crackle as appropriate to the scene). 나레이션 보이스오버는 후반 편집에서 별도로
-  입힌다.
+[actual sound]
+- dialogue: DIALOGUE: "<원문 대사 그대로>" — English dialogue, precise lip-sync,
+  accurate mouth movements matching every word, natural [성별] voice matching the character's age and tone.
+- narration: MUTE — no dialogue, no voice, ambient sound only (wind, rain, fire crackle as appropriate to the scene).
 ```
 
 ### 체크리스트 (매 클립)
@@ -200,22 +195,23 @@ print(f"✅ 검증 통과 ({len(clips)}클립, 총 {sum(c['duration'] for c in c
 `<title>_intro_flow_prompts.txt` 한 파일로 저장 후 present_files.
 
 ```
-STEP 1 (신규 Ingredient만 — 기존 캐릭터는 <제목>_flow_prompts.txt STEP1 참조로 생략)
-=== LOCATION (...) ===
-=== LOCATION UPLOAD ===
-...
-
 [훅 원문]
 1. <해당 프로젝트 인트로 문장 1, 원문 그대로>
 2. <해당 프로젝트 인트로 문장 2, 원문 그대로>
 n. ...
 
+STEP 1 (신규 Ingredient만 — 기존 캐릭터는 <제목>_flow_prompts.txt STEP1 참조로 생략)
+=== LOCATION (...) ===
+=== LOCATION UPLOAD ===
+...
+
+
 ===클립===
 CLIP 1 ({duration}s, {dialogue|narration})
 [원문] <이 클립이 다루는 문장 원문>
-[Ingredients] @<name1> [, @<name2>] [, LOCATION]
+[Ingredients] @<name1> [, @<name2>] [, @LOCATION]
 [Flow 프롬프트] <조립 공식대로>
-[오디오] <DIALOGUE "..."  또는  MUTE>
+[audio] <DIALOGUE "..."  또는  MUTE>
 
 CLIP 2 ({duration}s, ...)
 ...

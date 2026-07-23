@@ -15,7 +15,7 @@
 ## 시작 메시지
 ```
 🎬 Google Flow 이미지 프롬프트 생성기
-준비물: 1) 대본  2) 화풍(고정 STYLE_TAIL)  3) 장면 수(기본 36)
+준비물: 1) 대본  2) 화풍(STYLE_TAIL)  3) 장면 수(기본 48)
 ```
 
 ## 처리 흐름
@@ -47,7 +47,7 @@ print(f"✅ P1 ({words}단어)")
 ═══════════════════════════════════════════════
 ## PHASE 2: 장면 분할
 ═══════════════════════════════════════════════
-본문 추출(인트로/아웃트로 제거) → play length(about 162 wpm) 균등 분할.
+본문 추출(인트로/아웃트로 제거) → play length(about 154 wpm) 균등 분할.
 첫 장면은 "Long ago" 본문 시작부터. scenes=[{"n","start_idx","end_idx"}]
 
 모든 장면을 균등하게 처리한다.
@@ -97,7 +97,7 @@ for ing in ingredients:
     for k in ["role","anchor_outfit","anchor_hair","anchor_feature"]: assert ing.get(k), f"❌ {ing['name']} {k}"
 assert 1<=len(ingredients)<=6, f"❌ 인원 {len(ingredients)}"
 KMARK=["jeogori","dopo","danryeong","durumagi","gat","garima","samo","baji","chima","hanbok","topknot"]
-CMARK=["horn","goblin","dokkaebi","ghost","spirit","gumiho","fox","tiger","serpent","dragon"]
+CMARK=["horn","goblin","oni","ghost","spirit","gumiho","fox","tiger","serpent","dragon", "broom"]
 for ing in ingredients:
     blob=(ing["anchor_outfit"]+" "+ing["anchor_hair"]).lower()
     if ing.get("is_human",True):
@@ -256,6 +256,11 @@ print(f"✅ 최소 검증 통과 ({len(prompt_lines)}장면)")
 [대본 1~n]
 1. Long ago, ...
 n. ...
+
+[first sentence map]
+1: first sentence of 대본1
+2: first sentence of 대본2
+n: first sentence of 대본n
 ```
 <제목>_flow_prompts.txt 한 파일에 아래 순서로 저장 후 present_files.
 ```
