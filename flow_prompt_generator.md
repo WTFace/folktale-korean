@@ -251,7 +251,7 @@ print(f"✅ 최소 검증 통과 ({len(prompt_lines)}장면)")
 ```
 
 ## output: 2 files (이 구조·순서 고정)
-<제목>_scene_script.txt
+scene_script.txt
 ```
 [대본 1~n]
 1. Long ago, ...
@@ -262,7 +262,7 @@ n. ...
 2: first sentence of 대본2
 n: first sentence of 대본n
 ```
-<제목>_flow_prompts.txt 한 파일에 아래 순서로 저장 후 present_files.
+flow_prompts.txt 한 파일에 아래 순서로 저장 후 present_files.
 ```
 STEP 1
 PORTRAIT_TEMPLATE = neutral A-pose standing straight with both arms relaxed at the sides, plain flat neutral gray background, subject fully isolated, this is an identity reference only and the pose, hand position and background must NOT carry over into any scene, no hands clasped, no props no other figures,

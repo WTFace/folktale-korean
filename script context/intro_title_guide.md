@@ -32,7 +32,7 @@ character attribute list. some attr may not applicable to non-human characters.
 
 ---
 
-## intro 6 sentences (70–110 words)
+## intro 5 sentences (70–90 words)
 
 | 문장 | 규칙 |
 |---|---|

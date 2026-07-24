@@ -15,7 +15,7 @@
 - 남성: Bong, Manseok, Bonggu, Dusik, Seokwoo
 
 **Nobility / Aristocrats**
-- 남성: ManHo, Siheon, Gyeongwon, Dohun, Jinsu
+- 남성: ManHo, Hogu, Gyeongwon, Dohun, Jinsu
 - 여성: 택호를 씁니다 → Andong-daek, Cheongsong-daek, Haeju-daek, Naju-daek
 
 **Gisaeng - Courtesans / Artists**

@@ -10,34 +10,12 @@ Google Flow(Ingredients to Video / Veo 3.1 Lite || Omni Flash)용 클립 프롬�
 
 ## 절대 원칙 (충돌 시 최우선)
 
-1. 인트로(훅)만 생성한다. 본편 스포일러(결말·정체·반전) 노출 금지 — script_guide.md의
-   "no spoiler" 체크리스트를 그대로 적용한다.
+1. 인트로(훅)만 생성한다. 본편 스포일러(결말·정체·반전) 노출 금지 — script_guide.md의 "no spoiler" 체크리스트를 그대로 적용한다.
 2. 대사(큰따옴표 안 원문)는 한 글자도 수정·요약·의역하지 않는다. lip-sync에 그대로 쓴다.
-3. 나레이션 문장 자체도 각색하지 않는다. 다만 **시각 프롬프트(행동·카메라·조명·배경 묘사)는
-   나레이션에서 추론해 상세히 보강한다** — 이것은 각색이 아니라 서술의 시각화다.
-4. 인물 신원(외모)은 이미 만든 캐릭터 Ingredient 이미지에 있다. 프롬프트에 앵커를 반복하지
-   않는다 — `@name`만 쓴다. flow_prompt_generator.md STEP 2와 동일한 원칙.
-5. STYLE_TAIL은 flow_prompt_generator.md에서 쓴 것과 동일한 값을 그대로 재사용한다
-   (본편과 인트로가 다른 그림체로 보이면 안 된다). 웹툰 셀셰이딩처럼 특정 매체를
-   임의로 고정하지 않는다 — 화풍은 본편과 항상 같다.
+3. 나레이션 문장 자체도 각색하지 않는다. 다만 **시각 프롬프트(행동·카메라·조명·배경 묘사)는 나레이션에서 추론해 상세히 보강한다** — 이것은 각색이 아니라 서술의 시각화다.
+4. 인물 신원(외모)은 이미 만든 캐릭터 Ingredient 이미지에 있다. 프롬프트에 앵커를 반복하지 않는다 — `@name`만 쓴다. flow_prompt_generator.md STEP 2와 동일한 원칙.
+5. STYLE_TAIL은 flow_prompt_generator.md에서 쓴 것과 동일한 값을 그대로 재사용한다(본편과 인트로가 다른 그림체로 보이면 안 된다). 화풍은 본편과 항상 같다.
 6. 모든 출력에 텍스트·자막·말풍선 금지.
-
----
-
-## 문장 수 != 클립 수
-
-본편과 달리 인트로는 문장이 6개 정도. 문장 하나를 그대로 클립 프롬프트로
-쓰면 Flow가 배경·소품·조명·인물 동작 같은 디테일을 스스로 지어내며 본편과 다른 장면을
-만든다 (실측 확인됨)
-
-- 클립은 **문장이 아니라 감정 비트** 단위로 나눈다 (보통 3~5클립).
-- 한 클립에 나레이션 문장 여러 개를 묶어도 된다. 대사(따옴표) 문장은 립싱크 정확도를
-  위해 단독 클립으로 둔다.
-- **디테일 보강 규칙 (핵심):** 인트로 문장이 묘사하는 순간과 같은 순간을 본편 챕터가
-  이미 상세히 묘사하고 있다면 (예: 인트로의 "goblins twice his size"는 챕터 3의
-  "blue-gray as a storm cloud, one blunt horn, iron club as long as a fence post"와 같은 순간), 그 감각적 묘사(외형·소품·배경·조명)를 가져와 프롬프트를 보강한다.
-  단, 본편에서만 드러나는 결말·정체·다음 전개는 절대 가져오지 않는다 — 이미 인트로
-  시점에 드러나 있는 디테일만 확장한다.
 
 ---
 
@@ -73,10 +51,19 @@ print(f"✅ P1 (훅 문장 {len(lines)}개, CTA 제외)")
 ---
 
 ## PHASE 2: 클립 분할 (감정 비트 단위)
+### Don't use the intro as is—it's just a reference. Condense it to fit a 30-second video
+- 클립은 **문장이 아니라 감정 비트** 단위로 나눈다 (3~4 clips).
+- narration != Intro hook (5 sentences). narrations should be shorter.
+- one clip's narration  max 8 seconds (154 wpm)
+- dialog 문장은 립싱크 정확도를 위해 단독 클립으로 둔다. At least 2 sentences of dialogs (entire clips)
+- **디테일 보강 규칙 (핵심):** 인트로 문장이 묘사하는 순간과 같은 순간을 본편 챕터가
+  이미 상세히 묘사하고 있다면 그 감각적 묘사(외형·소품·배경·조명)를 가져와 프롬프트를 보강한다.
+  단, 본편에서만 드러나는 결말·정체·다음 전개는 절대 가져오지 않는다 — 이미 인트로
+  시점에 드러나 있는 디테일만 확장한다.
 
 ```python
-TOTAL_DURATION = 24  # 기본값, 사용자가 매 실행마다 지정 가능 (최대 30, 하드 캡)
-assert TOTAL_DURATION <= 30, "❌ 30초 상한 초과"
+TOTAL_DURATION = 24  # 기본값, 사용자가 매 실행마다 지정 가능 (최대 32, 하드 캡)
+assert TOTAL_DURATION <= 32, "❌ 32초 상한 초과"
 
 # clips=[{"n":1,"lines":[...],"duration":8,"is_dialogue":False}, ...]
 clips = [...]  # 감정 비트로 3~5개 그룹핑, 대사 문장은 단독 클립
@@ -133,8 +120,6 @@ Ingredient 이미지 + 텍스트 프롬프트로 영상을 바로 만든다).
 
 ### 조립 공식
 ```
-[원문] 그 클립이 다루는 대본 문장 원문 그대로 (수정 금지)
-
 CLIP n (지속 {duration}s, {대사|나레이션})
 
 [Ingredients] @name1 [, @name2] [, @LOCATION]  ← 최대 3장
@@ -144,7 +129,7 @@ CLIP n (지속 {duration}s, {대사|나레이션})
 [actual sound]
 - dialogue: DIALOGUE: "<원문 대사 그대로>" — English dialogue, precise lip-sync,
   accurate mouth movements matching every word, natural [성별] voice matching the character's age and tone.
-- narration: MUTE — no dialogue, no voice, ambient sound only (wind, rain, fire crackle as appropriate to the scene).
+- narration: NARRATION: <원문 그대로> - no characters talk, narration with ambient sound only (wind, rain, fire crackle as appropriate to the scene)
 ```
 
 ### 체크리스트 (매 클립)
@@ -196,9 +181,7 @@ print(f"✅ 검증 통과 ({len(clips)}클립, 총 {sum(c['duration'] for c in c
 
 ```
 [훅 원문]
-1. <해당 프로젝트 인트로 문장 1, 원문 그대로>
-2. <해당 프로젝트 인트로 문장 2, 원문 그대로>
-n. ...
+<해당 프로젝트 인트로 문장 원문 그대로>
 
 STEP 1 (신규 Ingredient만 — 기존 캐릭터는 <제목>_flow_prompts.txt STEP1 참조로 생략)
 === LOCATION (...) ===
@@ -206,15 +189,10 @@ STEP 1 (신규 Ingredient만 — 기존 캐릭터는 <제목>_flow_prompts.txt S
 ...
 
 
-===클립===
+===클립=== <조립 공식대로>
 CLIP 1 ({duration}s, {dialogue|narration})
-[원문] <이 클립이 다루는 문장 원문>
-[Ingredients] @<name1> [, @<name2>] [, @LOCATION]
-[Flow 프롬프트] <조립 공식대로>
-[audio] <DIALOGUE "..."  또는  MUTE>
-
-CLIP 2 ({duration}s, ...)
 ...
+CLIP n
 ```
 
 - 두 블록 완전 분리. STEP 1 → 훅 원문 → 클립 순서 고정.

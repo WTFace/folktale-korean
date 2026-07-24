@@ -59,7 +59,7 @@ estimate play length.
 - 마지막에 고정 마무리 멘트를 붙입니다
 
 ### step 7: 마무리
-## `intro_title_guide.md` 참조 generate two files.
+## `intro_title_guide.md` 참조, return two files.
 - [title].txt (for entire script)
 - thumbnail_brief.md (thumbnail description. thumbnail should be one main image can represent intro sentences)
 
