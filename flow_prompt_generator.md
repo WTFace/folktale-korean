@@ -253,14 +253,14 @@ print(f"✅ 최소 검증 통과 ({len(prompt_lines)}장면)")
 ## output: 2 files (이 구조·순서 고정)
 scene_script.txt
 ```
-[대본 1~n]
+[scene 1~n]
 1. Long ago, ...
 n. ...
 
-[first sentence map]
-1: first sentence of 대본1
-2: first sentence of 대본2
-n: first sentence of 대본n
+[first sentence map(number of chapter: first sentence of the chapter) the same chapter uses the same image. apply uploaded images for each clips(a chapter contains many clips)]
+1: first sentence of scene 1
+2: first sentence of scene 2
+n: first sentence of scene n
 ```
 flow_prompts.txt 한 파일에 아래 순서로 저장 후 present_files.
 ```
