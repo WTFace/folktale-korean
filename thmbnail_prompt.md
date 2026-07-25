@@ -12,7 +12,7 @@ title means text embeded in the tumbnail image(max 12 words).
 
 1. **사용자가 구체적으로 지시하면("이렇게 해줘 / 이걸로 바꿔 / 이 느낌으로") → 옵션·대안 제시 없이 즉시 그대로 실행한다.** A안/B안 갈라치기 금지. 대안은 사용자가 "별로다 / 막혔다 / 어떻게 할까"라고 *물을 때만* 낸다.
 
-2. **`<제목>_flow_prompts.txt`(flow_prompt_generator.md 산출물)가 있으면 → 먼저 처음부터 끝까지 읽는다.**
+2. **`flow_prompts.txt`(flow_prompt_generator.md 산출물)가 있으면 → 먼저 처음부터 끝까지 읽는다.**
    STEP1 각 줄은 `<캐릭터 외형>, <PORTRAIT_TEMPLATE> <STYLE_TAIL>` 구조다.
    - 캐릭터 외형: PORTRAIT_TEMPLATE **앞부분만** 그대로 복사해서 쓴다. PORTRAIT_TEMPLATE
      자체(포즈·배경·"must NOT carry over" 등 Flow 초상 생성 전용 지시)는 버린다.
@@ -178,7 +178,7 @@ title에는 사건의 클라이맥스 한 컷(행동 1개 또는 발화 1개)만
 ═══════════════════════════════════════════
 
 1단계 — title 4종 + 이미지 묘사 → 사용자에게 선택 요청
-2단계 — 옵션 확정되면 → `<제목>_flow_prompts.txt`가 있으면 거기서 STYLE_TAIL을 자동으로
+2단계 — 옵션 확정되면 → `flow_prompts.txt`가 있으면 거기서 STYLE_TAIL을 자동으로
 가져와 쓴다(묻지 않음). 없으면 "래퍼런스 이미지 / 래퍼런스 프롬프트 / 없이 진행" 중
 무엇으로 할지 묻는다.
 3단계 — 영문 이미지 프롬프트 생성 (아래 룰)
@@ -209,8 +209,7 @@ title에는 사건의 클라이맥스 한 컷(행동 1개 또는 발화 1개)만
 "A Korean Joseon-era scene" / "A historical drama still"
 
 **2. 인물 — ★ 우선순위 규칙을 먼저 적용**
-- `<제목>_flow_prompts.txt` STEP1에 그 인물이 있으면 → 최우선 규칙 2대로 PORTRAIT_TEMPLATE
-  앞부분만 그대로 복사해서 넣는다. 아래 템플릿 무시. 새로 풀어쓰지 않는다.
+- `flow_prompts.txt` STEP1에 그 인물이 있으면 → 최우선 규칙 2대로 @name 사용. 아래 템플릿 무시. 새로 풀어쓰지 않는다.
 - 이 파일이 없을 때만 아래 템플릿을 쓴다.
 - STEP1 텍스트와 사용자가 준 레퍼런스 이미지가 충돌하면 → **이미지 기준**으로 보정.
 
@@ -242,7 +241,7 @@ hanbok, gat, jeogori, dopo, chima, hanok, giwa roof, binyeo
 
 ## 래퍼런스 반영 — 넷 중 하나
 
-**D. `<제목>_flow_prompts.txt`가 있는 경우 (기본, 최우선)**
+**D. `flow_prompts.txt`가 있는 경우 (기본, 최우선)**
 이 프로젝트는 이미 본편 많은 장면·인트로 클립에서 같은 STYLE_TAIL을 쓰고 있다. 그 파일
 아무 줄 끝에서나 STYLE_TAIL을 그대로 가져와 쓴다 — A/B/C처럼 새로 추출·압축하지 않는다.
 사용자가 별도 레퍼런스 이미지·프롬프트를 명시적으로 주면 그때만 A/B로 대체한다.

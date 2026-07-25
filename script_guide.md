@@ -80,3 +80,8 @@ estimate play length.
 
 ## 고정 마무리 멘트
 Thank you for watching. Hope you enjoyed this.
+
+## common tags
+#fairytale #folktale #storyforall #storytelling #storyvideo #story #storyforkids
+#koreanstory #korean #hanbok
+fairytale, folktale, storyforkids, koreanstory,korean,hanbok
